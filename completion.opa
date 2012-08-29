@@ -31,7 +31,7 @@ mydictionnary() = dict
    So you need to ensure that the client don't need to call the server to execute the suggest function.
    We also add the constraint that the client does not possess the dictionnary defining the completion (so it must come from the server).
    To indicates that the function should be exhanged from the server to the client without needing the server we must authorize the publication of its environment.
-   This is doe using @public_env directive.
+   This is done using @public_env directive.
 */
 
 
