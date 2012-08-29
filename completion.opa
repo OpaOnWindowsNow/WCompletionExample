@@ -1,6 +1,7 @@
 /* Example of WCompletion use, with all computation on client side */
 
 import stdlib.widgets.completion
+import stdlib.io.file
 
 
 /* a dictionnay represent all possible result of the completion */
@@ -11,10 +12,12 @@ search_dict(prefix,dict) =
 
 string_to_suggestion(s:string):WCompletion.suggestion = {input=s display=<>{s}</> item=s}
 
-dict =  List.init((_ -> Random.string(5)),1100) ++ [ "tic","tac","isidor" ]
+@server_private
+dict =  String.explode("\n",  string_of_binary(File.content("english.0")) ) ++ [ "tic","tac","isidor" ]
+// if opa version < 3230 use a smaller dictionnary with nodejs backend, e.g. List.init( _ -> Random.string(8), 1000 )
 
 /* the dictionnay computation is a server operation, could be the db for instance */
-// server_private is equvalent to protected in js-like syntax
+// server_private is equivalent to protected in js-like syntax
 @server_private
 mydictionnary() = dict
 
@@ -71,8 +74,8 @@ WithCache = {{
   @client
   cache_dictionnary = Mutable.make(none : option({prefix:string dict:list(string)}))
 
-  size_to_get_dictionnary = 1 // minimal number of letter to fill the cache
-  size_to_get_completion = size_to_get_dictionnary + 1 // minimal number of letter of letter to have a completion
+  size_to_get_dictionnary = 3 // minimal number of letter to fill the cache
+  size_to_get_completion = size_to_get_dictionnary + 0 // minimal number of letter of letter to have a completion
 
   // Remark : this function could consider updating the cache if it is older that some long time for dictionnary that change during the interaction
   /* a suggest function that fills the cache if needed or use it
